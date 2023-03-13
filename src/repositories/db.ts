@@ -38,7 +38,7 @@ if (!mongoUri) {
 //
 
 const client = new MongoClient(mongoUri)
-const db = client.db("BlogsApi");
+const db = client.db();
 export const blogsCollection = db.collection<BlogType>("Blogs");
 export const postsCollection = db.collection<PostType>("Posts");
 export const usersCollection = db.collection<UserType>("Users");
