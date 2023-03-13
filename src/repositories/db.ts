@@ -35,6 +35,7 @@ if (!mongoUri) {
     throw new Error("❗️ Url doesn't found")
 }
 
+//
 
 const client = new MongoClient(mongoUri)
 const db = client.db("BlogsApi");
