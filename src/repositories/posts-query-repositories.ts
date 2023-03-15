@@ -1,7 +1,7 @@
 import {Sort, SortDirection} from "mongodb";
 import {postsCollection} from "./db";
+import {PostType} from "./types";
 
-import {PostType} from "./db";
 
 export const postsQueryRepositories = {
     async findPosts(page: number, limit:number, sortDirection: SortDirection, sortBy: string, skip: number) {

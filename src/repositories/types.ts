@@ -1,0 +1,37 @@
+export type BlogType = {
+    id: string,
+    name: string,
+    description: string,
+    websiteUrl: string,
+    createdAt: string,
+    isMembership: boolean
+}
+
+export type PostType = {
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+    blogName: string,
+    createdAt: string,
+
+}
+
+export type UserType = {
+    id: string,
+    login: string,
+    email: string,
+    password: string,
+    createdAt: string
+}
+
+export type CommentType = {
+    id: string,
+    content: string,
+    commentatorInfo: {
+        userId: string,
+        userLogin: string
+    },
+    "createdAt": string
+}

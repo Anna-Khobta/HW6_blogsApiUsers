@@ -1,4 +1,4 @@
-import {body, param} from "express-validator";
+import {body} from "express-validator";
 
 export const titleValidation = body('title')
     .trim().not().isEmpty().withMessage("The title is empty")

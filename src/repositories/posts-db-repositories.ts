@@ -1,5 +1,6 @@
-import {blogsCollection, BlogType, postsCollection, PostType} from "../repositories/db";
-import {blogsRepository} from "./blogs-db-repositories";
+import {blogsCollection, postsCollection} from "../repositories/db";
+
+import {BlogType, PostType} from "./types";
 
 
 export const postsRepositories = {

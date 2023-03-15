@@ -7,6 +7,8 @@ import {postsRouter} from "./routers/posts-router";
 import {deleteAllRouter} from "./routers/delete-all-routers";
 import {usersRouter} from "./routers/users-router";
 import {runDb} from "./repositories/db";
+import {authRouter} from "./routers/auth-router";
+import {postsCommentsRouter} from "./routers/posts-comments-router";
 
 
 
@@ -22,10 +24,12 @@ app.get('/', (req: Request, res: Response ) => {
     res.send(helloMessage)
 })
 
-app.use('/', blogsRouter)
-app.use('/', postsRouter)
+app.use('/blogs', blogsRouter)
+app.use('/posts', postsRouter)
 app.use('/', deleteAllRouter)
-app.use('/', usersRouter)
+app.use('/users', usersRouter)
+app.use('/auth', authRouter)
+app.use('/posts', postsCommentsRouter)
 
 
 //start app

@@ -1,32 +1,5 @@
 import {MongoClient} from "mongodb";
-
-export type BlogType = {
-    id: string,
-    name: string,
-    description: string,
-    websiteUrl: string,
-    createdAt: string,
-    isMembership: boolean
-}
-
-export type PostType = {
-    id: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
-    createdAt: string,
-
-}
-
-export type UserType = {
-    id: string,
-    login: string,
-    email: string,
-    password: string,
-    createdAt: string
-}
+import {BlogType, CommentType, PostType, UserType} from "./types";
 
 
 const mongoUri = process.env.MONGO_URL
@@ -35,13 +8,14 @@ if (!mongoUri) {
     throw new Error("❗️ Url doesn't found")
 }
 
-//
 
 const client = new MongoClient(mongoUri)
-const db = client.db();
+const db = client.db(); // const db = client.db("BlogsApi")
 export const blogsCollection = db.collection<BlogType>("Blogs");
 export const postsCollection = db.collection<PostType>("Posts");
 export const usersCollection = db.collection<UserType>("Users");
+
+export const commentsCollection = db.collection<CommentType>("Comments")
 
 export async function runDb () {
     try {

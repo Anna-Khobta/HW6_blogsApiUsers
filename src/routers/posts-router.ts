@@ -1,23 +1,20 @@
 
-import {query, Request, Response, Router} from "express";
+import {Request, Response, Router} from "express";
 import {authorizationMiddleware} from "../middlewares/authorization";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 
 import {titleValidation, shortDescriptionValidation, contentValidation, idValidation} from "../middlewares/posts-validations";
-import {postsRepositories} from "../repositories/posts-db-repositories";
 
 import {postsService} from "../domain/posts-service";
 import {getPagination} from "../functions/pagination";
 import {postsQueryRepositories} from "../repositories/posts-query-repositories";
-import {blogsQueryRepository} from "../repositories/blogs-query-repository";
-import {blogsRouter} from "./blogs-router";
 
 
 
 export const postsRouter = Router({})
 
 
-postsRouter.get('/posts',
+postsRouter.get('/',
     async (req: Request, res: Response ) => {
 
        const {page, limit, sortDirection, sortBy, skip} = getPagination(req.query)
@@ -28,7 +25,7 @@ postsRouter.get('/posts',
     })
 
 
-postsRouter.get('/posts/:id', async (req: Request, res: Response ) => {
+postsRouter.get('/:id', async (req: Request, res: Response ) => {
 
     let findPostID = await postsQueryRepositories.findPostById(req.params.id)
 
@@ -37,14 +34,10 @@ postsRouter.get('/posts/:id', async (req: Request, res: Response ) => {
     } else {
         return res.send(404)
     }
-
 })
 
 
-
-
-
-postsRouter.post('/posts',
+postsRouter.post('/',
     authorizationMiddleware,
     idValidation,
     titleValidation,
@@ -64,29 +57,8 @@ postsRouter.post('/posts',
         }
     })
 
-//create new post for special blog
-postsRouter.post('/blogs/:blogId/posts',
-    authorizationMiddleware,
-    titleValidation,
-    shortDescriptionValidation,
-    contentValidation,
-    inputValidationMiddleware,
-    async (req: Request, res: Response ) => {
 
-
-        const newPostWithoughtID = await postsService.createPost(req.body.title,
-            req.body.shortDescription, req.body.content, req.params.blogId )
-
-        if (newPostWithoughtID) {
-            res.status(201).send(newPostWithoughtID)
-        } else {
-            return res.send(404)
-        }
-    })
-
-
-
-postsRouter.put('/posts/:id',
+postsRouter.put('/:id',
     authorizationMiddleware,
     idValidation,
     titleValidation,
@@ -101,8 +73,6 @@ postsRouter.put('/posts/:id',
         if (updatedPosWithoughtID) {
             res.send(204)
 
-            // должно быть 204! оставвила для теста
-
         } else {
             return res.send(404)
         }
@@ -110,7 +80,7 @@ postsRouter.put('/posts/:id',
 
 
 
-postsRouter.delete('/posts/:id',
+postsRouter.delete('/:id',
     authorizationMiddleware,
     async (req: Request, res: Response ) => {
 
@@ -122,4 +92,5 @@ postsRouter.delete('/posts/:id',
             res.send(404)
         }
     })
+
 

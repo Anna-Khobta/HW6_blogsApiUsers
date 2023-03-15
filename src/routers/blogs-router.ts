@@ -13,8 +13,11 @@ export const blogsRouter = Router({})
 
 import {getPagination} from "../functions/pagination";
 import {postsQueryRepositories} from "../repositories/posts-query-repositories";
+import {contentValidation, shortDescriptionValidation, titleValidation} from "../middlewares/posts-validations";
+import {postsService} from "../domain/posts-service";
+import {postsRouter} from "./posts-router";
 
-blogsRouter.get('/blogs', async (req: Request, res: Response ) => {
+blogsRouter.get('/', async (req: Request, res: Response ) => {
 
     const {page, limit, sortDirection, sortBy, searchNameTerm, skip} = getPagination(req.query)
 
@@ -24,7 +27,7 @@ blogsRouter.get('/blogs', async (req: Request, res: Response ) => {
 
 
 // Returns blog by Id
-blogsRouter.get('/blogs/:id', async(req: Request, res: Response ) => {
+blogsRouter.get('/:id', async(req: Request, res: Response ) => {
 
     let blogByID = await blogsQueryRepository.findBlogById(req.params.id)
 
@@ -37,7 +40,7 @@ blogsRouter.get('/blogs/:id', async(req: Request, res: Response ) => {
 })
 
 // Returns all posts for specified blog
-blogsRouter.get("/blogs/:blogId/posts", async (req: Request, res: Response) => {
+blogsRouter.get("/:blogId/posts", async (req: Request, res: Response) => {
 
     let checkBlogByID = await blogsQueryRepository.findBlogByblogId(req.params.blogId)
 
@@ -54,7 +57,7 @@ blogsRouter.get("/blogs/:blogId/posts", async (req: Request, res: Response) => {
 })
 
 
-blogsRouter.post('/blogs',
+blogsRouter.post('/',
     authorizationMiddleware,
     nameValidation,
     descriptionValidation,
@@ -68,7 +71,7 @@ blogsRouter.post('/blogs',
 )
 
 
-blogsRouter.put('/blogs/:id',
+blogsRouter.put('/:id',
     authorizationMiddleware,
     nameValidation,
     descriptionValidation,
@@ -85,7 +88,7 @@ blogsRouter.put('/blogs/:id',
         }
     })
 
-blogsRouter.delete('/blogs/:id',
+blogsRouter.delete('/:id',
     authorizationMiddleware,
    async (req: Request, res: Response ) => {
 
@@ -97,3 +100,25 @@ blogsRouter.delete('/blogs/:id',
         res.send(404)
     }
    })
+
+
+
+//create new post for special blog
+postsRouter.post('/:blogId/posts',
+    authorizationMiddleware,
+    titleValidation,
+    shortDescriptionValidation,
+    contentValidation,
+    inputValidationMiddleware,
+    async (req: Request, res: Response ) => {
+
+        const newPostWithoughtID = await postsService.createPost(req.body.title,
+            req.body.shortDescription, req.body.content, req.params.blogId )
+
+        if (newPostWithoughtID) {
+            res.status(201).send(newPostWithoughtID)
+        } else {
+            return res.send(404)
+        }
+    })
+

@@ -1,5 +1,6 @@
-import {UserType} from "../repositories/db";
+
 import {usersRepository} from "../repositories/users-db-repositories";
+import {UserType} from "../repositories/types";
 
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(5);
@@ -26,9 +27,9 @@ export const usersService= {
 
     },
 
-    async loginUser(checkUserInDb:UserType, loginOrEmail: string, password: string): Promise <boolean> {
+    async loginUser(foundUserInDb:UserType, loginOrEmail: string, password: string): Promise <boolean> {
 
-        const validPassword: boolean = await bcrypt.compare(password, checkUserInDb.password)
+        const validPassword: boolean = await bcrypt.compare(password, foundUserInDb.password)
 
         return validPassword
 
@@ -42,6 +43,10 @@ export const usersService= {
     async deleteAllUsers(): Promise<boolean> {
         return usersRepository.deleteAllUsers()
 
+    },
+
+    async findUserById(userId:string) {
+        return await usersRepository.findUserById(userId)
     }
 
 

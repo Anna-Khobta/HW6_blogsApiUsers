@@ -1,6 +1,5 @@
 
 import {NextFunction, Request, Response} from "express";
-import {blogsRouter} from "../routers/blogs-router";
 
 // authentication middleware
 
@@ -20,8 +19,8 @@ if (typeof req.headers.authorization !== "undefined") {
         }
     }
 }
-
     res.sendStatus(401) // custom message
+
 //GMT express deprecated res.send(status): Use res.sendStatus(status) instead
 })
 

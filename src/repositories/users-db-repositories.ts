@@ -1,5 +1,6 @@
-import {usersCollection, UserType} from "./db";
+import {blogsCollection, usersCollection} from "./db";
 import {SortDirection} from "mongodb";
+import {UserType} from "./types";
 
 export const usersRepository = {
 
@@ -80,5 +81,12 @@ export const usersRepository = {
     async deleteAllUsers(): Promise<boolean> {
         const result = await usersCollection.deleteMany({})
         return result.acknowledged
+    },
+
+    async findUserById(userId: string): Promise< UserType| null> {
+
+        const foundUser = await usersCollection.findOne({id: userId},{projection:{_id:0}})
+
+        return foundUser
     }
 }
