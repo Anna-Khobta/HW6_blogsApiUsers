@@ -17,7 +17,7 @@ import {contentValidation, shortDescriptionValidation, titleValidation} from "..
 import {postsService} from "../domain/posts-service";
 import {postsRouter} from "./posts-router";
 
-blogsRouter.get('/', async (req: Request, res: Response ) => {
+blogsRouter.get('/blogs', async (req: Request, res: Response ) => {
 
     const {page, limit, sortDirection, sortBy, searchNameTerm, skip} = getPagination(req.query)
 
@@ -27,7 +27,7 @@ blogsRouter.get('/', async (req: Request, res: Response ) => {
 
 
 // Returns blog by Id
-blogsRouter.get('/:id', async(req: Request, res: Response ) => {
+blogsRouter.get('/blogs/:id', async(req: Request, res: Response ) => {
 
     let blogByID = await blogsQueryRepository.findBlogById(req.params.id)
 
@@ -39,25 +39,9 @@ blogsRouter.get('/:id', async(req: Request, res: Response ) => {
 
 })
 
-// Returns all posts for specified blog
-blogsRouter.get("/:blogId/posts", async (req: Request, res: Response) => {
-
-    let checkBlogByID = await blogsQueryRepository.findBlogByblogId(req.params.blogId)
-
-    const {page, limit, sortDirection, sortBy, skip} = getPagination(req.query)
-    const blogId = req.params.blogId
-
-    if (checkBlogByID) {
-        let postsForBlog = await postsQueryRepositories.findPostsByBlogId(blogId, page, limit, sortDirection, sortBy, skip)
-        return res.status(200).send(postsForBlog)
-    } else {
-        return res.send(404)
-    }
-
-})
 
 
-blogsRouter.post('/',
+blogsRouter.post('/blogs',
     authorizationMiddleware,
     nameValidation,
     descriptionValidation,
@@ -71,7 +55,7 @@ blogsRouter.post('/',
 )
 
 
-blogsRouter.put('/:id',
+blogsRouter.put('/blogs/:id',
     authorizationMiddleware,
     nameValidation,
     descriptionValidation,
@@ -88,7 +72,7 @@ blogsRouter.put('/:id',
         }
     })
 
-blogsRouter.delete('/:id',
+blogsRouter.delete('/blogs/:id',
     authorizationMiddleware,
    async (req: Request, res: Response ) => {
 
@@ -102,9 +86,25 @@ blogsRouter.delete('/:id',
    })
 
 
+// Returns all posts for specified blog
+blogsRouter.get("/blogs/:blogId/posts", async (req: Request, res: Response) => {
+
+    let checkBlogByID = await blogsQueryRepository.findBlogByblogId(req.params.blogId)
+
+    const {page, limit, sortDirection, sortBy, skip} = getPagination(req.query)
+    const blogId = req.params.blogId
+
+    if (checkBlogByID) {
+        let postsForBlog = await postsQueryRepositories.findPostsByBlogId(blogId, page, limit, sortDirection, sortBy, skip)
+        return res.status(200).send(postsForBlog)
+    } else {
+        return res.send(404)
+    }
+
+})
 
 //create new post for special blog
-postsRouter.post('/:blogId/posts',
+blogsRouter.post('/blogs/:blogId/posts',
     authorizationMiddleware,
     titleValidation,
     shortDescriptionValidation,

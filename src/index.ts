@@ -24,7 +24,7 @@ app.get('/', (req: Request, res: Response ) => {
     res.send(helloMessage)
 })
 
-app.use('/blogs', blogsRouter)
+app.use('/', blogsRouter)
 
 app.use('/', deleteAllRouter)
 app.use('/users', usersRouter)
