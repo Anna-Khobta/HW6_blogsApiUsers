@@ -37,8 +37,11 @@ export const commentsService = {
 
         const foundCommentOwner = await commentsCollection.findOne({id: id}, {projection: {_id: 0}})
 
+            // как сравнить 2 объекта лучше?
+
         if (foundCommentOwner) {
-            if (foundCommentOwner.commentatorInfo === commentatorInfo) {
+            if (foundCommentOwner.commentatorInfo.userId === commentatorInfo.userId &&
+                foundCommentOwner.commentatorInfo.userLogin === commentatorInfo.userLogin) {
                 return true
             }
         }

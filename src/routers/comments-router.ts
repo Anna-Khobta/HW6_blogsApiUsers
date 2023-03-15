@@ -66,6 +66,8 @@ commentsRouter
 
                 const checkUserOwnComment = await commentsService.checkUser(userInfo!, req.params.id)
 
+                //console.log(checkUserOwnComment)
+
                 if (checkUserOwnComment) {
 
                     const isDeleted = await commentsService.deleteComment(req.params.id)
