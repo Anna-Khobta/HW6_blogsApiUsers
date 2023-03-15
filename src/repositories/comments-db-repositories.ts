@@ -56,14 +56,6 @@ export const commentsRepositories = {
     },
 
 
-
-
-
-
-
-
-
-
     async deleteAllPosts(): Promise<boolean> {
         const result = await postsCollection.deleteMany({})
         return result.acknowledged

@@ -10,12 +10,8 @@ import {commentsQueryRepositories} from "../repositories/comments-query-reposito
 
 export const postsCommentsRouter = Router({})
 
-
-
-postsCommentsRouter
-
     // create new comment
-    .post('/postId/comments',
+postsCommentsRouter.post('posts/:postId/comments',
     authBearerMiddleware,
     contentCommentValidation,
     inputValidationMiddleware,
@@ -35,7 +31,7 @@ postsCommentsRouter
 
 
     // return comments for special post with Pagination
-    .get('/postId/comments',
+postsCommentsRouter.get('posts/:postId/comments',
     async (req: Request, res: Response ) => {
 
         const {page, limit, sortDirection, sortBy, skip} = getPagination(req.query)

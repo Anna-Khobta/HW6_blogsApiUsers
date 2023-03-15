@@ -1,6 +1,6 @@
-import {blogsCollection, usersCollection} from "./db";
+import {usersCollection} from "./db";
 import {SortDirection} from "mongodb";
-import {UserType} from "./types";
+import {UserType, UserTypeAuthMe} from "./types";
 
 export const usersRepository = {
 
@@ -83,10 +83,12 @@ export const usersRepository = {
         return result.acknowledged
     },
 
-    async findUserById(userId: string): Promise< UserType| null> {
+    async findUserById(userId: string): Promise< UserType | null > {
 
-        const foundUser = await usersCollection.findOne({id: userId},{projection:{_id:0}})
+        let foundUser = await usersCollection.findOne(
+            {id: userId},
+            {projection: {_id: 0, password: 0, createdAt: 0}})
 
-        return foundUser
+        return foundUser || null
     }
 }

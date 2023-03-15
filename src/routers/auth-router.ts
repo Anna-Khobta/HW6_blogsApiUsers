@@ -44,6 +44,12 @@ authRouter.get("/me",
 
     const meUser = await usersRepository.findUserById(req.user!.id)
 
-        res.status(200).send(meUser)
+        console.log(meUser)
+
+        res.status(200).send({
+            userId: meUser?.id,
+            login: meUser?.login,
+            email: meUser?.email
+        })
 
 })

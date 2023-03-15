@@ -35,3 +35,9 @@ export type CommentType = {
     },
     "createdAt": string
 }
+
+export type UserTypeAuthMe = {
+    email: string,
+    login: string,
+    userId: string
+}

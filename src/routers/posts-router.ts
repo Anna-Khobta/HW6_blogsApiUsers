@@ -8,6 +8,11 @@ import {titleValidation, shortDescriptionValidation, contentValidation, idValida
 import {postsService} from "../domain/posts-service";
 import {getPagination} from "../functions/pagination";
 import {postsQueryRepositories} from "../repositories/posts-query-repositories";
+import {authBearerMiddleware} from "../middlewares/authToken";
+import {contentCommentValidation} from "../middlewares/comments-validation";
+import {commentsService} from "../domain/comments-service";
+import {commentsQueryRepositories} from "../repositories/comments-query-repositories";
+import {postsCommentsRouter} from "./posts-comments-router";
 
 
 
@@ -32,7 +37,7 @@ postsRouter.get('/:id', async (req: Request, res: Response ) => {
     if (findPostID) {
         return res.status(200).send(findPostID)
     } else {
-        return res.send(404)
+        return res.sendStatus(404)
     }
 })
 
@@ -53,7 +58,7 @@ postsRouter.post('/',
         if (newPostWithoughtID) {
             res.status(201).send(newPostWithoughtID)
         } else {
-            return res.send(404)
+            return res.sendStatus(404)
         }
     })
 
@@ -71,10 +76,10 @@ postsRouter.put('/:id',
         req.body.shortDescription, req.body.content, req.body.blogId )
 
         if (updatedPosWithoughtID) {
-            res.send(204)
+            res.sendStatus(204)
 
         } else {
-            return res.send(404)
+            return res.sendStatus(404)
         }
     })
 
@@ -87,9 +92,43 @@ postsRouter.delete('/:id',
         const isDeleted = await postsService.deletePost(req.params.id)
 
         if (isDeleted) {
-            res.send(204)
+            res.sendStatus(204)
         } else {
-            res.send(404)
+            res.sendStatus(404)
+        }
+    })
+
+
+postsRouter.post('/:postId/comments',
+        authBearerMiddleware,
+        contentCommentValidation,
+        inputValidationMiddleware,
+        async (req: Request, res: Response ) => {
+
+            let findPostID = await postsQueryRepositories.findPostById(req.params.postId)
+
+            const userInfo = req.user
+
+            if (findPostID) {
+                const newComment = await commentsService.createComment(req.body.content, userInfo!)
+                res.status(201).send(newComment)
+            } else {
+                return res.send(404)
+            }
+        })
+
+postsRouter.get('/:postId/comments',
+    async (req: Request, res: Response ) => {
+
+        const {page, limit, sortDirection, sortBy, skip} = getPagination(req.query)
+
+        let findPostID = await postsQueryRepositories.findPostById(req.params.postId)
+
+        if (findPostID) {
+            const foundComments = await commentsQueryRepositories.findComments(page, limit, sortDirection, sortBy, skip)
+            res.status(200).send(foundComments)
+        } else {
+            return res.send(404)
         }
     })
 

@@ -24,7 +24,9 @@ export const jwtService = {
 
         try {
             const result: any = jwt.verify(tokenFromHead, settings.JWT_SECRET) // если verify не сработает, упадет ошибка
-            return new ObjectId(result.userId)
+
+            //console.log(result)
+            return result.userId
 
         } catch (error) {
             return null
