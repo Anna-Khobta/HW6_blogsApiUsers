@@ -9,6 +9,7 @@ import {usersRouter} from "./routers/users-router";
 import {runDb} from "./repositories/db";
 import {authRouter} from "./routers/auth-router";
 import {postsCommentsRouter} from "./routers/posts-comments-router";
+import {commentsRouter} from "./routers/comments-router";
 
 
 
@@ -25,11 +26,11 @@ app.get('/', (req: Request, res: Response ) => {
 })
 
 app.use('/', blogsRouter)
-
 app.use('/', deleteAllRouter)
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
 app.use('/posts', postsRouter)
+app.use('/comments', commentsRouter)
 
 //app.use('/', postsCommentsRouter)
 

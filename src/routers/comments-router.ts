@@ -13,7 +13,7 @@ export const commentsRouter = Router()
 commentsRouter
 
     //update comment by id
-    .put("/comments/id",
+    .put("/:id",
         authBearerMiddleware,
         contentCommentValidation,
         inputValidationMiddleware,
@@ -42,7 +42,7 @@ commentsRouter
         })
 
     //return comment by id
-    .get("/comments/id/", async (req: Request, res:Response) => {
+    .get("/:id/", async (req: Request, res:Response) => {
 
         const findCommentById = await commentsQueryRepositories.findCommentById(req.params.id)
 
@@ -54,7 +54,7 @@ commentsRouter
         })
 
     //delete comment by id
-    .delete("/comments/id",
+    .delete("/:id",
         authBearerMiddleware,
         async (req: Request, res:Response) => {
 
