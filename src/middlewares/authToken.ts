@@ -15,7 +15,7 @@ export const authBearerMiddleware = async (req: Request, res:Response, next:Next
 
     if (!userId) {
         console.log('Oops, something wrong')
-        res.sendStatus(401)
+        return res.sendStatus(401) // add return here не ломается?
     }
     req.user = await usersService.findUserById(userId.toString())
     next()

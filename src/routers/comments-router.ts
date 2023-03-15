@@ -19,24 +19,26 @@ commentsRouter
         inputValidationMiddleware,
         async (req: Request, res:Response) => {
 
+
+
             const userInfo = req.user
 
             const checkUserOwnComment = await commentsService.checkUser(userInfo!, req.params.id)
 
-            if (checkUserOwnComment) {
+            const updatedCommentWithoughtId = await commentsService.updateComment(req.params.id, req.body.content)
 
-                const updatedCommentWithoughtId = await commentsService.updateComment(req.params.id, req.body.content)
+            if (updatedCommentWithoughtId) {
 
-                if (updatedCommentWithoughtId) {
+                if (checkUserOwnComment) {
 
                     res.sendStatus(204)
 
             } else {
-                res.sendStatus(404)
+                res.sendStatus(403)
             }
 
             } else {
-                return res.sendStatus(403)
+                return res.sendStatus(404)
             }
 
         })
