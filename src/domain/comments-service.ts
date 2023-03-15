@@ -2,6 +2,7 @@ import {CommentType, PostType, UserType} from "../repositories/types";
 import {postsRepositories} from "../repositories/posts-db-repositories";
 import {commentsRepositories} from "../repositories/comments-db-repositories";
 import {commentsCollection} from "../repositories/db";
+import {usersRepository} from "../repositories/users-db-repositories";
 
 export const commentsService = {
 
@@ -57,5 +58,10 @@ export const commentsService = {
     async deleteComment (id: string): Promise<boolean> {
 
         return commentsRepositories.deleteComment(id)
+    },
+
+    async deleteAllComments(): Promise<boolean> {
+        return commentsRepositories.deleteAllComments()
+
     }
 }

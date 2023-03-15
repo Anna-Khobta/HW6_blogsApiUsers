@@ -37,28 +37,10 @@ export const commentsRepositories = {
     },
 
 
-    async findFeedbacks(title: string | null | undefined): Promise<PostType[]> {
-        const filter: any = {}
-
-        if (title) {
-            filter.title = {$regex: title}
-        }
-        return postsCollection.find((filter), {projection: {_id: 0}}).toArray()
-    },
-
-    // TO DO вынести блог в блоги или отдельно
-
-    async findBlogName(blogId: string): Promise <BlogType | null> {
-
-        let foundBlogName = await blogsCollection.findOne({id: blogId}, {projection: {_id: 0}})
-
-        return foundBlogName || null
-    },
-
-
-    async deleteAllPosts(): Promise<boolean> {
-        const result = await postsCollection.deleteMany({})
+    async deleteAllComments(): Promise<boolean> {
+        const result = await commentsCollection.deleteMany({})
         return result.acknowledged
         // если всё удалит, вернет true
-    }
+
+    },
 }
