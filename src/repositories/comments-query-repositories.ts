@@ -1,21 +1,22 @@
 import {SortDirection} from "mongodb";
 import {commentsCollection} from "./db";
-import {CommentType} from "./types";
+import {CommentDBType} from "./types";
 
 
 export const commentsQueryRepositories = {
-    async findComments (page: number, limit:number,
-                        sortDirection: SortDirection,
-                        sortBy: string, skip: number) {
+    async findCommentsForPost (postId: string, page: number, limit:number,
+                               sortDirection: SortDirection,
+                               sortBy: string, skip: number) {
+        const filter = {postId}
         const findComments = await commentsCollection.find(
-            {},
-            {projection: {_id: 0}})
+            filter,
+            {projection: {_id: 0, postId: 0}})
+            .sort({ [sortBy]: sortDirection })
             .skip(skip)
             .limit(limit)
-            .sort({ [sortBy]: sortDirection })
             .toArray()
 
-        const total = await commentsCollection.countDocuments()
+        const total = await commentsCollection.countDocuments(filter)
         const pagesCount = Math.ceil(total/limit)
 
         return {
@@ -28,14 +29,14 @@ export const commentsQueryRepositories = {
 
     },
 
-    async findCommentById(id: string): Promise<CommentType | null> {
+    async findCommentById(id: string): Promise<CommentDBType | null> {
 
-        const foundComment: CommentType | null = await commentsCollection.findOne({id: id}, {projection: {_id: 0}})
-
-        if (foundComment) {
-            return foundComment
-        } else {
-            return null
-        }
+        const foundComment: CommentDBType | null = await commentsCollection.findOne({id: id}, {projection: {_id: 0, postId: 0}})
+        return foundComment
+        // if (foundComment) {
+        //     return foundComment
+        // } else {
+        //     return null
+        // }
     }
 }

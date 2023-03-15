@@ -1,22 +1,17 @@
 import {blogsCollection, postsCollection, commentsCollection} from "../repositories/db";
 
-import {BlogType, PostType, CommentType} from "./types";
+import {BlogType, PostType, CommentDBType} from "./types";
 
 
 export const commentsRepositories = {
 
-    async createComment(newComment: CommentType): Promise<CommentType | null | undefined> {
-
-        const newCommentInDb = await commentsCollection.insertOne(newComment)
-
-        const newCommentWithoughtID= commentsCollection.findOne({id: newComment.id},{projection:{_id:0}})
-
-        return newCommentWithoughtID
-
+    async createComment(newComment: CommentDBType): Promise<CommentDBType> {
+        await commentsCollection.insertOne({...newComment})
+        return newComment
     },
 
 
-    async findCommentById (id: string): Promise <CommentType | null> {
+    async findCommentById (id: string): Promise <CommentDBType | null> {
         let foundCommentById = await commentsCollection.findOne({id: id}, {projection: {_id: 0}})
         return foundCommentById || null
     },

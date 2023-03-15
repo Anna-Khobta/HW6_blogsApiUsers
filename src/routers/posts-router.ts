@@ -12,7 +12,6 @@ import {authBearerMiddleware} from "../middlewares/authToken";
 import {contentCommentValidation} from "../middlewares/comments-validation";
 import {commentsService} from "../domain/comments-service";
 import {commentsQueryRepositories} from "../repositories/comments-query-repositories";
-import {postsCommentsRouter} from "./posts-comments-router";
 
 
 
@@ -105,15 +104,15 @@ postsRouter.post('/:postId/comments',
         inputValidationMiddleware,
         async (req: Request, res: Response ) => {
 
-            let findPostID = await postsQueryRepositories.findPostById(req.params.postId)
+            const post = await postsQueryRepositories.findPostById(req.params.postId)
 
             const userInfo = req.user
 
-            if (findPostID) {
-                const newComment = await commentsService.createComment(req.body.content, userInfo!)
+            if (post) {
+                const newComment = await commentsService.createComment(post.id, req.body.content, userInfo!)
                 res.status(201).send(newComment)
             } else {
-                return res.send(404)
+                return res.sendStatus(404)
             }
         })
 
@@ -122,13 +121,13 @@ postsRouter.get('/:postId/comments',
 
         const {page, limit, sortDirection, sortBy, skip} = getPagination(req.query)
 
-        let findPostID = await postsQueryRepositories.findPostById(req.params.postId)
+        let post = await postsQueryRepositories.findPostById(req.params.postId)
 
-        if (findPostID) {
-            const foundComments = await commentsQueryRepositories.findComments(page, limit, sortDirection, sortBy, skip)
+        if (post) {
+            const foundComments = await commentsQueryRepositories.findCommentsForPost(post.id, page, limit, sortDirection, sortBy, skip)
             res.status(200).send(foundComments)
         } else {
-            return res.send(404)
+            return res.sendStatus(404)
         }
     })
 

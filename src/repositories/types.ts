@@ -26,15 +26,27 @@ export type UserType = {
     createdAt: string
 }
 
-export type CommentType = {
+export type CommentDBType = {
+    id: string,
+    postId: string
+    content: string,
+    commentatorInfo: {
+        userId: string,
+        userLogin: string
+    },
+    createdAt: string
+}
+
+export type CommentViewType = {
     id: string,
     content: string,
     commentatorInfo: {
         userId: string,
         userLogin: string
     },
-    "createdAt": string
+    createdAt: string
 }
+
 
 export type UserTypeAuthMe = {
     email: string,
