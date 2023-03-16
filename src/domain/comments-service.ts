@@ -20,7 +20,7 @@ export const commentsService = {
 
     async createComment(postId: string, content: string, userInfo: UserType): Promise<CommentViewType> {
 
-        console.log(userInfo)
+        //console.log(userInfo)
         const commentatorInfo = {
             userId: userInfo.id,
             userLogin: userInfo.login

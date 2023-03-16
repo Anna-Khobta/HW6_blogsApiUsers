@@ -44,7 +44,7 @@ authRouter.get("/me",
 
     const meUser = await usersRepository.findUserById(req.user!.id)
 
-        console.log(meUser)
+        //console.log(meUser)
 
         res.status(200).send({
             userId: meUser?.id,

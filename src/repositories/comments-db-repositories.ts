@@ -1,6 +1,6 @@
-import {blogsCollection, postsCollection, commentsCollection} from "../repositories/db";
+import {commentsCollection} from "../repositories/db";
 
-import {BlogType, PostType, CommentDBType} from "./types";
+import {CommentDBType} from "./types";
 
 
 export const commentsRepositories = {
